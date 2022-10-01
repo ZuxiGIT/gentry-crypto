@@ -1,4 +1,4 @@
 # gentry-crypto
 Gentry cryptosystem
 
-jopa bobra
+danila - check mic
