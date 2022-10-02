@@ -1,12 +1,12 @@
 #ifndef LINALG_HPP
 #define LINALG_HPP
 
-template <int Length, class Object_Type>
+template <class OT, int L>
 struct Vector
 {
-	Object_Type * Values;
+	OT * Values;
 
-	Vector(Object_Type * values = NULL);
+	Vector(OT * values = NULL);
 	~Vector();
 
 	Vector operator - ();
@@ -24,12 +24,12 @@ struct Vector
 	Vector operator /=(int number);
 };
 
-template <int Width, int Height, class Object_Type>
+template <class OT, int W, int H>
 struct Matrix
 {
-	Object_Type ** Values;
+	OT ** Values;
 
-	Matrix(Object_Type ** values = NULL);
+	Matrix(OT ** values = NULL);
 	~Matrix();
 
 	Matrix operator - ();
@@ -46,5 +46,22 @@ struct Matrix
 	Matrix operator / (int number);
 	Matrix operator /=(int number);
 };
+
+template <int OT, int L>
+Vector<OT, L>::Vector(ObjectT * values)
+{
+	Values = new OT[L];
+
+	for (int i = 0; i < L; i++)
+	{
+		Values[i] = values[i];
+	}
+}
+
+template <int OT, int L>
+Vector<OT, L>::~Vector()
+{
+	delete[] Values;
+}
 
 #endif

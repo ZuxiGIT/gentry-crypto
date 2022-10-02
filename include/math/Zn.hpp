@@ -9,7 +9,7 @@ struct Zn
 	Zn(int value = 0);
 
 	Zn operator - ();
-	Zn operator ++();
+	Zn operator ++(int);
 
 	Zn operator + (Zn number);
 	Zn operator +=(Zn number);
@@ -54,7 +54,7 @@ Zn<M> Zn<M>::operator -()
 }
 
 template <int M>
-Zn<M> Zn<M>::operator ++()
+Zn<M> Zn<M>::operator ++(int)
 {
 	return Zn<M>(Value + 1);
 }
