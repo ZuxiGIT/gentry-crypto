@@ -1,67 +1,90 @@
-#ifndef LINALG_HPP
-#define LINALG_HPP
+#ifndef GENTRYCRYPTO_MATH_LINALG_HPP
+#define GENTRYCRYPTO_MATH_LINALG_HPP
 
-template <class OT, int L>
-struct Vector
+#include <iostream>
+
+struct Col
 {
-	OT * Values;
-
-	Vector(OT * values = NULL);
-	~Vector();
-
-	Vector operator - ();
-
-	Vector operator + (Vector vec);
-	Vector operator +=(Vector vec);
-
-	Vector operator - (Vector vec);
-	Vector operator -=(Vector vec);
-
-	Vector operator * (int number);
-	Vector operator *=(int number);
-
-	Vector operator / (int number);
-	Vector operator /=(int number);
+    size_t value = 1;
+    explicit Col() {}
+    explicit Col(size_t value): value(value) {}
 };
 
-template <class OT, int W, int H>
-struct Matrix
+struct Row
 {
-	OT ** Values;
-
-	Matrix(OT ** values = NULL);
-	~Matrix();
-
-	Matrix operator - ();
-
-	Matrix operator + (Matrix mat);
-	Matrix operator +=(Matrix mat);
-
-	Matrix operator - (Matrix mat);
-	Matrix operator -=(Matrix mat);
-
-	Matrix operator * (int number);
-	Matrix operator *=(int number);
-
-	Matrix operator / (int number);
-	Matrix operator /=(int number);
+    size_t value = 1;
+    explicit Row() {}
+    explicit Row(size_t value): value(value) {}
 };
 
-template <int OT, int L>
-Vector<OT, L>::Vector(ObjectT * values)
+template <typename T>
+class Matrix
 {
-	Values = new OT[L];
+    public:
+        explicit Matrix();
+        Matrix(Row, Col);
+        Matrix(Row, Col, T**);
+        ~Matrix();
+        
+        Matrix(const Matrix&);
+        Matrix& operator=(const Matrix&);
+        
+        Matrix(Matrix&&);
+        Matrix& operator=(Matrix&&);     
 
-	for (int i = 0; i < L; i++)
-	{
-		Values[i] = values[i];
-	}
-}
+        Matrix operator+=(const Matrix&);
+        Matrix operator-=(const Matrix&);
+        Matrix operator*=(const Matrix&);
+        Matrix operator/=(const Matrix&) = delete;
 
-template <int OT, int L>
-Vector<OT, L>::~Vector()
-{
-	delete[] Values;
-}
+        Matrix operator*=(const double&);
+        Matrix operator/=(const double&);
 
-#endif
+        Matrix operator+() const;
+        Matrix operator-() const;
+
+        Matrix& operator++() = delete;
+        Matrix& operator--() = delete;
+
+        Matrix& operator++(int) = delete;
+        Matrix& operator--(int) = delete;
+
+        bool operator< (const Matrix&) const = delete;
+        bool operator> (const Matrix&) const = delete;
+        bool operator<=(const Matrix&) const = delete;
+        bool operator>=(const Matrix&) const = delete;
+
+        T& operator()(size_t, size_t);
+
+        Matrix Transpose();
+        //Matrix Determinant();
+
+    private:
+        void Memory_Alloc();
+        void Memory_Dealloc();
+
+        Row rows;
+        Col cols;
+        T** data = nullptr;
+
+};
+
+template <typename T>
+Matrix<T> operator+(const Matrix<T>&, const Matrix<T>&);
+
+template <typename T>
+Matrix<T> operator-(const Matrix<T>&, const Matrix<T>&);
+
+template <typename T>
+Matrix<T> operator*(const Matrix<T>&, const Matrix<T>&);
+
+template <typename T>
+Matrix<T> operator*(const Matrix<T>&, const double&);
+
+template <typename T>
+Matrix<T> operator*(const double&, const Matrix<T>&);
+
+template <typename T>
+Matrix<T> operator/(const Matrix<T>&, const double&);
+
+#endif // GENTRYCRYPTO_MATH_LINALG_HPP
