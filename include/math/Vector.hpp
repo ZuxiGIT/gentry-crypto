@@ -9,8 +9,8 @@ template <typename T>
 class Vector
 {
     private:
-        unsigned int v_size = 0;
-        T* v_data = nullptr;
+        unsigned int m_size = 0;
+        T* m_data = nullptr;
     
     public:
         Vector() = delete;
@@ -39,21 +39,21 @@ class Vector
 
 template <typename T>
 Vector<T>::Vector(unsigned int size)
-: v_size(size), 
-  v_data(new T[v_size])
+: m_size(size), 
+  m_data(new T[m_size])
 {}
 
 template <typename T>
 Vector<T>::~Vector()
 {
-    delete[] v_data; 
+    delete[] m_data; 
 }
 
 template <typename T>
 Vector<T>::Vector(const Vector<T>& rhs)
-: Vector(rhs.v_size)
+: Vector(rhs.m_size)
 {
-    std::copy(rhs.v_data, rhs.v_data + rhs.v_size, v_data);
+    std::copy(rhs.m_data, rhs.m_data + rhs.m_size, m_data);
 }
 
 template <typename T>
@@ -62,45 +62,45 @@ Vector<T>& Vector<T>::operator=(const Vector<T>& rhs)
     if (this == &rhs)
         return *this;
 
-    if (v_size != rhs.v_size)
+    if (m_size != rhs.m_size)
     {   
-        delete[] v_data;
-        v_size = rhs.v_size;
-        v_data = new T[v_size];
+        delete[] m_data;
+        m_size = rhs.m_size;
+        m_data = new T[m_size];
     }
 
-    std::copy(rhs.v_data, rhs.v_data + rhs.v_size, v_data);
+    std::copy(rhs.m_data, rhs.m_data + rhs.m_size, m_data);
     return *this;
 }
 
 template <typename T>
 Vector<T>::Vector(Vector<T>&& rhs)
 {
-    v_data = rhs.v_data;
-    v_size = rhs.v_size;
-    rhs.v_data = nullptr;
+    m_data = rhs.m_data;
+    m_size = rhs.m_size;
+    rhs.m_data = nullptr;
 }
 
 template <typename T>
 Vector<T>& Vector<T>::operator=(Vector<T>&& rhs)
 {
-    delete[] v_data;
-    v_data = rhs.v_data;
-    v_size = rhs.v_size;
-    rhs.v_data = nullptr;
+    delete[] m_data;
+    m_data = rhs.m_data;
+    m_size = rhs.m_size;
+    rhs.m_data = nullptr;
 }
 
 template <typename T>
 Vector<T>& Vector<T>::operator+=(const Vector<T>& obj)
 {
-    if (v_size != obj.v_size)
+    if (m_size != obj.m_size)
     {
         throw std::domain_error("Error: Vector spaces don't match. Please fix it and try again.");
     }
 
-    for (int i = 0; i < v_size; i++)
+    for (int i = 0; i < m_size; i++)
     {
-        v_data[i] += obj.v_data[i];
+        m_data[i] += obj.m_data[i];
     }
     return *this;
 }
@@ -108,14 +108,14 @@ Vector<T>& Vector<T>::operator+=(const Vector<T>& obj)
 template <typename T>
 Vector<T>& Vector<T>::operator-=(const Vector<T>& obj)
 {
-    if (v_size != obj.v_size)
+    if (m_size != obj.m_size)
     {
         throw std::domain_error("Error: Vector spaces don't match. Please fix it and try again.");
     }
 
-    for (int i = 0; i < v_size; i++)
+    for (int i = 0; i < m_size; i++)
     {
-        v_data[i] -= obj.v_data[i];
+        m_data[i] -= obj.m_data[i];
     }
     return *this;
 }
@@ -123,15 +123,15 @@ Vector<T>& Vector<T>::operator-=(const Vector<T>& obj)
 template <typename T>
 Vector<T>& Vector<T>::operator*=(const Vector<T>& obj)
 {
-    if (v_size != obj.v_size)
+    if (m_size != obj.m_size)
     {
         throw std::domain_error("Error: Vector spaces don't match. Please fix input and try again.");
     }
 
-    Vector<T> temp(obj.v_size);
-    for (int i = 0; i < v_size; i++)
+    Vector<T> temp(obj.m_size);
+    for (int i = 0; i < m_size; i++)
     {
-        temp.v_data[i] = v_data[i] * obj.v_data[i];
+        temp.m_data[i] = m_data[i] * obj.m_data[i];
     }
     return (*this = std::move(temp));
 }
@@ -139,9 +139,9 @@ Vector<T>& Vector<T>::operator*=(const Vector<T>& obj)
 template <typename T>
 Vector<T>& Vector<T>::operator*=(const double& number)
 {
-    for (int i = 0; i < v_size; i++)
+    for (int i = 0; i < m_size; i++)
     {
-        v_data[i] *= number;
+        m_data[i] *= number;
     }
     return *this;
 }
@@ -149,9 +149,9 @@ Vector<T>& Vector<T>::operator*=(const double& number)
 template <typename T>
 Vector<T>& Vector<T>::operator/=(const double& number)
 {
-    for (int i = 0; i < v_size; i++)
+    for (int i = 0; i < m_size; i++)
     {
-        v_data[i] /= number;
+        m_data[i] /= number;
     }
     return *this;
 }
@@ -165,10 +165,10 @@ Vector<T> Vector<T>::operator+() const
 template <typename T>
 Vector<T> Vector<T>::operator-() const
 {
-    Vector<T> temp(v_size);
-    for (int i = 0; i < v_size; i++)
+    Vector<T> temp(m_size);
+    for (int i = 0; i < m_size; i++)
     {
-        temp[i] -= v_data[i];
+        temp[i] -= m_data[i];
     }
     return temp;
 }
@@ -257,21 +257,21 @@ Vector<T> operator/(const Vector<T>& obj, const double& number)
 template <typename T>
 T& Vector<T>::operator()(unsigned int elem) const
 {
-    if (v_size == 0) 
+    if (m_size == 0) 
     {
         throw std::domain_error("Error: References to indices start with 1. Please fix it and try again.");
     }
-    else if (elem > v_size) 
+    else if (elem > m_size) 
     {
         throw std::domain_error("Error: Going out of the Vector boundaries. Please fix it and try again.");
     }
-    return v_data[elem - 1];
+    return m_data[elem - 1];
 }
 
 template <typename T>
 unsigned int Vector<T>::getSize() const
 {
-    return v_size;
+    return m_size;
 }
 
 #endif // GENTRYCRYPTO_MATH_VECTOR_HPP

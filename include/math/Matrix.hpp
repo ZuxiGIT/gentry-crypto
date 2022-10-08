@@ -95,6 +95,8 @@ Matrix<T>& Matrix<T>::operator=(Matrix<T>&& rhs)
     m_col = rhs.m_col;
     m_row = rhs.m_row;
     rhs.m_data = nullptr;
+
+    return *this;
 }
 
 template <typename T>
