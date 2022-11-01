@@ -43,9 +43,7 @@ class Matrix
 
 template <typename T>
 Matrix<T>::Matrix(unsigned int row, unsigned int col)
-: m_row(row),
-  m_col(col),
-  m_data(new T[m_col * m_row])
+: m_row(row), m_col(col), m_data(new T[m_col * m_row])
 {}
 
 template <typename T>
@@ -76,6 +74,7 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& rhs)
     }
 
     std::copy(rhs.m_data, rhs.m_data + rhs.m_row * rhs.m_col, m_data);
+    return *this;
 }
 
 template <typename T>
@@ -95,7 +94,6 @@ Matrix<T>& Matrix<T>::operator=(Matrix<T>&& rhs)
     m_col = rhs.m_col;
     m_row = rhs.m_row;
     rhs.m_data = nullptr;
-
     return *this;
 }
 
@@ -104,7 +102,7 @@ Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& obj)
 {
     if (m_row != obj.m_row|| m_col != obj.m_col)
     {
-        throw std::domain_error("Error: Matrix spaces don't match. Please fix it and try again.");
+        throw std::domain_error("Error: Spaces don't match. Please fix it and try again.");
     }
 
     for (int i = 0; i < m_row; i++)
@@ -122,7 +120,7 @@ Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& obj)
 {
     if (m_row != obj.m_row || m_col != obj.m_col)
     {
-        throw std::domain_error("Error: Matrix spaces don't match. Please fix it and try again.");
+        throw std::domain_error("Error: Spaces don't match. Please fix it and try again.");
     }
 
     for (int i = 0; i < m_row; i++)
@@ -140,7 +138,7 @@ Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& obj)
 {
     if (m_row != obj.m_col)
     {
-        throw std::domain_error("Error: Matrix spaces don't match. Please fix input and try again.");
+        throw std::domain_error("Error: Spaces don't match. Please fix input and try again.");
     }
 
     Matrix<T> temp(obj.m_row, obj.m_col);
@@ -248,15 +246,11 @@ Matrix<T> operator/(const Matrix<T>& obj, const double& number)
 template <typename T>
 T& Matrix<T>::operator()(unsigned int row, unsigned int col) const
 {
-    if (row == 0 || col == 0) 
-    {
-        throw std::domain_error("Error: References to indices start with 1. Please fix it and try again.");
-    }
-    else if (row > m_row || col > m_col) 
+    if (row > m_row || col > m_col) 
     {
         throw std::domain_error("Error: Going out of the matrix boundaries. Please fix it and try again.");
     }
-    return *(m_data + m_row * (row - 1) + col - 1);
+    return *(m_data + m_row * row + col);
 }
 
 template <typename T>
@@ -285,4 +279,4 @@ unsigned int Matrix<T>::getRowSize() const
     return m_row;
 }
 
-#endif // GENTRYCRYPTO_MATH_MATRIX_HPP
+#endif //GENTRYCRYPTO_MATH_MATRIX_HPP
