@@ -1,6 +1,4 @@
 # gentry-crypto
 Gentry cryptosystem
 
-An implementation of fully-homomorphic gentry cryptosystem with an add of online poll functionality.
-
-danila - check mic
+An implementation of somewhat- and fully-homomorphic gentry cryptosystem.
